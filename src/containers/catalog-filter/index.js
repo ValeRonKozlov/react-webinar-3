@@ -8,9 +8,11 @@ import SideLayout from '../../components/side-layout';
 import treeToList from '../../utils/tree-to-list';
 import listToTree from '../../utils/list-to-tree';
 
+
 function CatalogFilter() {
 
   const store = useStore();
+  const { lang , t } = useTranslate();
 
   const select = useSelector(state => ({
     sort: state.catalog.params.sort,
@@ -36,28 +38,26 @@ function CatalogFilter() {
   const options = {
     // Варианты сортировок
     sort: useMemo(() => ([
-      {value: 'order', title: 'По порядку'},
-      {value: 'title.ru', title: 'По именованию'},
-      {value: '-price', title: 'Сначала дорогие'},
-      {value: 'edition', title: 'Древние'},
-    ]), []),
+      {value: 'order', title: t('filter.categories.order')},
+      {value: 'title.ru', title: t('filter.categories.title')},
+      {value: '-price', title: t('filter.categories.price')},
+      {value: 'edition', title: t('filter.categories.edition')},
+    ]), [lang]),
     // Категории для фильтра
     categories: useMemo(() => ([
-      {value: '', title: 'Все'},
+      {value: '', title: t('filter.categories.all')},
       ...treeToList(listToTree(select.categories), (item, level) => (
         {value: item._id, title: '- '.repeat(level) + item.title}
       ))
     ]), [select.categories]),
   };
 
-  const {t} = useTranslate();
-
   return (
     <SideLayout padding='medium'>
       <Select options={options.categories} value={select.category} onChange={callbacks.onCategory}/>
-      <Select options={options.sort} value={select.sort} onChange={callbacks.onSort}/>
-      <Input value={select.query} onChange={callbacks.onSearch} placeholder={'Поиск'}
-             delay={1000}/>
+      <Select options={options.sort} value={select.sort} onChange={callbacks.onSort} />
+      <Input value={select.query} onChange={callbacks.onSearch} placeholder={t('filter.search')}
+            delay={1000}/>
       <button onClick={callbacks.onReset}>{t('filter.reset')}</button>
     </SideLayout>
   )

@@ -4,7 +4,7 @@ import {Provider} from 'react-redux';
 import {ServicesContext} from './context';
 import {I18nProvider} from './i18n/context';
 import App from './app';
-import Services from './services';
+import Services from './service/services';
 import config from './config';
 
 const services = new Services(config);

@@ -31,18 +31,18 @@ function Navigation() {
   }
 
   // Функция для локализации текстов
-  const {t} = useTranslate();
+  const {lang, t} = useTranslate();
 
   const options = {
     menu: useMemo(() => ([
       {key: 1, title: t('menu.main'), link: '/'},
-    ]), [t])
+    ]), [lang, t])
   };
 
   return (
     <SideLayout side='between'>
       <Menu items={options.menu} onNavigate={callbacks.onNavigate}/>
-      <BasketTool onOpen={callbacks.openModalBasket} amount={select.amount} sum={select.sum} t={t}/>
+      <BasketTool onOpen={callbacks.openModalBasket} amount={select.amount} sum={select.sum} t={t} lang={lang}/>
     </SideLayout>
   );
 }

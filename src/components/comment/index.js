@@ -3,12 +3,17 @@ import PropTypes from 'prop-types';
 import CommentLogIn from "../comment-log-in";
 import {cn as bem} from '@bem-react/classname';
 import CommentForm from "../comment-form";
+import useSelector from '../../hooks/use-selector';
 
 import './style.css';
 
 function Comment({user, date, text, indent, id, openLogInText, onChangeLogInText, exists, onChangeOpenFormComment, openFormComment, hand2, t}) {
 
   const cn = bem('Comment');
+
+  const select = useSelector(state => ({
+    user: state.session.user,
+  }));
 
   const dataDate = new Date(date)
 
@@ -37,7 +42,7 @@ function Comment({user, date, text, indent, id, openLogInText, onChangeLogInText
     <div style={{marginLeft: `${indent}px`}}>
       <div className={cn()}>
         <div className={cn('wrapper')}>
-          <p className={cn('user')}>{user}</p>
+          <p className={select.user.profile?.name === user ? cn('user marked') : cn('user')}>{user}</p>
           <p className={cn('date')}>
             {
               `${changeDate.date} ${changeDate.month} ${ changeDate.year} в ${changeDate.hours}:${changeDate.minutes}`
@@ -50,7 +55,8 @@ function Comment({user, date, text, indent, id, openLogInText, onChangeLogInText
         {openFormComment === id ?
           <CommentForm
             title={t('comment.newComment.reply')}
-            exists={exists} indent={indent}
+            exists={exists}
+            indent={indent}
             type={true}
             onChangeOpenFormComment={onChangeOpenFormComment}
             commentId={id}

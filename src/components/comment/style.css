@@ -25,6 +25,10 @@
   font-weight: 700;
 }
 
+.marked {
+  color: #666;
+}
+
 .Comment-date {
   padding: 0;
   margin: 0;
@@ -42,6 +46,7 @@
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
+  overflow-wrap: break-word;
 }
 
 .Comment-button {

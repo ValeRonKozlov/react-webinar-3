@@ -14,7 +14,7 @@ function CommentForm({title, exists, type='', onChangeOpenFormComment, commentId
   const [reqParams, setReqParams] = useState();
 
   useEffect(() => {
-    setReqParams(state => ({...state, text: valueArea, parent: {_id: commentId, _type: "comment"}}))
+    setReqParams(state => ({...state, text: valueArea, parent: {_id: commentId, _type: "comment" }}))
   }, [type, valueArea])
 
   const postData = (e) => {
@@ -26,7 +26,7 @@ function CommentForm({title, exists, type='', onChangeOpenFormComment, commentId
   return (
     <>
       {exists ?
-        <form onSubmit={postData} className={cn()} style={!type ? {marginLeft: '0px'} : {marginLeft: '30px', paddingLeft: '0'}}>
+        <form onSubmit={postData} className={cn()} style={!type ? {marginLeft: '0px'} : {paddingLeft: '0'}}>
           <p className={cn('title')}>{title}</p>
           <textarea
             className={cn('textarea')}
@@ -35,7 +35,7 @@ function CommentForm({title, exists, type='', onChangeOpenFormComment, commentId
           >
       </textarea>
           <div className={cn('wrapper')}>
-            <button className={cn('send')} type={'submit'}>{t('comment.send')}</button>
+            <button className={cn('send')} type={'submit'} disabled={valueArea.trim() === ''}>{t('comment.send')}</button>
             {type ? <button className={cn('cansel')} type={'button'} value={false} onClick={onChangeOpenFormComment}>{t('comment.cansel')}</button> : null}
           </div>
         </form> :

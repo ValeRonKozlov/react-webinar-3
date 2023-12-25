@@ -1,12 +1,13 @@
 import { memo, useState } from "react";
 import Comment from "../../components/comment";
-import { generateListComments } from "../../utils/comment-format";
 import TitleComment from "../../components/title-comment";
 import CommentLogIn from "../../components/comment-log-in";
 import useSelector from "../../hooks/use-selector";
 import CommentForm from "../../components/comment-form";
 import { useDispatch } from "react-redux";
 import commentsActions from "../../store-redux/comments/actions";
+import treeToList from "../../utils/tree-to-list";
+import listToTree from "../../utils/list-to-tree";
 
 function CommentsLayout({comments, idArticle, t}) {
 
@@ -38,34 +39,30 @@ function CommentsLayout({comments, idArticle, t}) {
     }
   }
 
-  const newCommentsList = generateListComments(comments, idArticle)
-    .map(item => {
-      return item.map((item2, i) => {
-        return (
-          <Comment
-            key={item2._id}
-            id={item2._id}
-            user={item2.author.profile.name}
-            date={item2.dateCreate}
-            text={item2.text}
-            indent={((i + 1) * 30)+ 10}
-            openLogInText={openLogInText}
-            onChangeLogInText={onChangeLogInText}
-            exists={exists}
-            onChangeOpenFormComment={onChangeOpenFormComment}
-            openFormComment={openFormComment}
-            hand2={postFormComment}
-            t={t}
-          />
-        )
-      })
-    }).flatMap(item => item)
-
+  const newCommentsList = treeToList(listToTree(comments), (item, level) => {
+    return (
+      <Comment
+        key={item._id}
+        id={item._id}
+        user={item?.author?.profile?.name}
+        date={item.dateCreate}
+        text={item.text}
+        indent={(level > 1 && level <= 4) ? level * 30 + 10 : level > 4 ? 150 : 40}
+        openLogInText={openLogInText}
+        onChangeLogInText={onChangeLogInText}
+        exists={exists}
+        onChangeOpenFormComment={onChangeOpenFormComment}
+        openFormComment={openFormComment}
+        hand2={postFormComment}
+        t={t}
+      />
+    )
+  });
 
   return (
     <>
       <TitleComment count={comments.length} t={t}/>
-      { newCommentsList.map( item => item ) }
+      {newCommentsList.map((item, key) => key ? (item) : '')}
       {
         openLogInText === 'false' ? <CommentLogIn exists={exists} type={openLogInText} t={t}/> : null
       }
